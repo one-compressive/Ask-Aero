@@ -96,59 +96,6 @@ article:hover {
     align-items: baseline;
 }
 
-.left-subsection {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    min-width: 60px;
-    align-items: center;
-}
-
-.left-subsection img.img-small {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-}
-
-.top-right-subsection {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-}
-
-.bottom-right-subsection {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;
-    font-size: 0.85rem;
-    color: #0d2a4f;
-}
-
-.bottom-right-subsection a {
-    color: #1A3E8C;
-    text-decoration: none;
-}
-
-.bottom-right-subsection p {
-    margin: 0;
-    font-weight: 500;
-}
-
-.right-subsection {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    flex-grow: 1;
-}
-
-.top-right-subsection a {
-    font-weight: bold;
-    color: #0d2a4f;
-    text-decoration: none;
-}
-
 .vote {
     display: flex;
     flex-direction: row;
@@ -363,7 +310,8 @@ h1, h2, h3, h4, h5, h6 {
     -webkit-user-select: none;
 }
 
-.frutiger-aero-button {
+.button {
+    align-self: flex-start;
     --hue: 171;
     --sat: 0.2;
     --glow-intensity: 0.7;
@@ -376,7 +324,6 @@ h1, h2, h3, h4, h5, h6 {
             rgba(255, 255, 255, var(--glow-intensity)),
             transparent);
 
-    /* Base Styling */
     background-color: var(--bg);
     background:
         var(--bottom-glow),
@@ -385,27 +332,22 @@ h1, h2, h3, h4, h5, h6 {
     border: 1px solid var(--bg);
     border-radius: 9999px;
 
-    /* Shadows and Effects */
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
 
-    /* Typography */
     color: var(--fg);
     font-family: "Lucida Grande", "Lucida Sans Unicode", "Segoe UI", system-ui, sans-serif;
     font-weight: 700;
     text-shadow: 0 2px 0.5em rgba(0, 0, 0, 0.2);
 
-    /* Layout */
     cursor: pointer;
     position: relative;
     transition: all 300ms ease;
 
-    /* Prevent text selection */
     user-select: none;
     -webkit-user-select: none;
 }
 
-/* Top Highlight Effect */
-.frutiger-aero-button::after {
+.button::after {
     content: "";
     position: absolute;
     top: 4%;
@@ -420,31 +362,28 @@ h1, h2, h3, h4, h5, h6 {
     pointer-events: none;
 }
 
-/* Hover State */
-.frutiger-aero-button:hover,
-.frutiger-aero-button:focus {
+.button:hover,
+.button:focus {
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
     transform: translateY(-1px);
 }
 
-/* Active State */
-.frutiger-aero-button:active {
+.button:active {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     transform: translateY(1px);
 }
 
-/* Size Variations */
-.frutiger-aero-button.small {
+.button.small {
     padding: 0.5em 1.5em;
     font-size: 0.875rem;
 }
 
-.frutiger-aero-button.medium {
+.button.medium {
     padding: 0.75em 2em;
     font-size: 1rem;
 }
 
-.frutiger-aero-button.large {
+.button.large {
     padding: 1em 3em;
     font-size: 1.125rem;
 }
@@ -459,4 +398,66 @@ footer {
     border-radius: 0 0 0 0;
     font-family: Arial, Helvetica, sans-serif;
     box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Маленькое поле ввода (однострочное) */
+input {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1rem;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background-color: white;
+    color: #0d2a4f;
+    box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+
+    box-sizing: border-box;
+}
+
+input:focus {
+    outline: none;
+    border-color: #0593ff;
+    box-shadow: 0 0 6px rgba(0, 147, 255, 0.4);
+    background-color: white;
+}
+
+/* Большое поле ввода (многострочное) */
+textarea {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background-color: white;
+    color: #0d2a4f;
+    box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    resize: vertical;
+    min-height: 120px;
+
+    box-sizing: border-box;
+    padding: 8px 12px;
+    line-height: normal;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #0593ff;
+    box-shadow: 0 0 6px rgba(0, 147, 255, 0.4);
+    background-color: white;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: rgba(13, 42, 79, 0.4);
+    font-style: italic;
+}
+
+.error-message {
+    grid-column: 1 / -1;
+    color: #cc0000;
+    font-size: 0.9rem;
+    margin-top: -5px;
+    padding-left: 80px;
 }
