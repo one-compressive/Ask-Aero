@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <link rel="stylesheet" href="../static/style.css" />
+    <link rel="stylesheet" href="../static/question.css" />
+  </head>
+  <body class="bg">
+    <header>
+      <h2>
+        <a href="#">AskAero</a>
+      </h2>
+      <div>
+        <form class="search-form">
+          <input type="text" placeholder="Search..." class="input" />
+          <button class="button small" type="submit">Ask!</button>
+        </form>
+      </div>
+      <img class="img-small" src="../static/img/default-avatar.jpg" />
+      <div>
+        <b>User Name</b>
+        <div>
+          <a href="#">Settings</a>
+          <a href="#">Log out</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-layout">
+      <main>
+        <div class="head-of-section">
+          <h1>What is Frutiger Aero, and why does it feel so nostalgic?</h1>
+        </div>
+
+        <article class="question-full">
+          <div class="left-subsection">
+            <img
+              class="img-small"
+              src="../static/img/default-avatar.jpg"
+              alt="Аватар пользователя"
+            />
+            <div class="vote">
+              <span class="count">42</span>
+              <div class="vote-buttons">
+                <button class="upvote">&#9650;</button>
+                <button class="downvote">&#9660;</button>
+              </div>
+            </div>
+          </div>
+          <div class="right-subsection">
+            <div class="question-text">
+              <p>
+                Guys, tell me more about the aesthetics of the early internet!
+                I've been seeing a lot of content about Frutiger Aero lately,
+                and I feel intensely nostalgic for the 2000s and early 2010s,
+                even though I didn't experience them directly.
+              </p>
+              <p>
+                What are the core visual elements (aqua, glass, gloss, bubbles,
+                nature elements) and cultural context that gave rise to this
+                aesthetic? Is it just Windows Vista and Mac OS X, or is there
+                more to it?
+              </p>
+            </div>
+
+            <div class="bottom-right-subsection">
+              <div class="question-meta">
+                <span class="author-info"
+                  >Asked by <a href="#">AeroLover25</a> on 12 Sep '25</span
+                >
+                <p>Tags:</p>
+                <a href="#">frutiger_aero</a>
+                <a href="#">2000s</a>
+                <a href="#">aesthetic</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <div class="answers-header">
+          <h2>4 Answers</h2>
+          <a href="#answer-form" class="button small">Add Answer</a>
+        </div>
+
+        <article class="answer-item correct-answer">
+          <div class="left-subsection">
+            <img
+              class="img-small"
+              src="../static/img/default-avatar.jpg"
+              alt="Аватар пользователя"
+            />
+            <div class="vote">
+              <span class="count">105</span>
+              <div class="vote-buttons">
+                <button class="upvote voted">&#9650;</button>
+                <button class="downvote">&#9660;</button>
+              </div>
+            </div>
+          </div>
+          <div class="right-subsection">
+            <div class="answer-text">
+              <p>
+                Frutiger Aero (FA) is more than just a style; it's a reflection
+                of early 21st-century optimism about technology and a digital
+                future that felt clean, shiny, and close to nature.
+              </p>
+              <p>
+                Core elements include skeuomorphism, high-gloss "Aqua"
+                interfaces (like the reflective dock in Mac OS X), realistic
+                bubbles, vibrant blues and greens, and images of the sky,
+                clouds, and water. It's the aesthetic of Web 2.0 and the
+                post-Y2K era, symbolizing a clean break and a hope for a
+                high-tech, yet organic, future.
+              </p>
+            </div>
+            <div class="bottom-right-subsection answer-meta-actions">
+              <span class="author-info"
+                >Answered by <a href="#">DesignGuru</a> on 14 Sep '25</span
+              >
+              <div class="actions">
+                <input
+                  type="checkbox"
+                  id="correct-answer"
+                  name="is_correct"
+                  checked
+                />
+                <label for="correct-answer"> Correct Answer!</label>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="answer-item">
+          <div class="left-subsection">
+            <img
+              class="img-small"
+              src="../static/img/default-avatar.jpg"
+              alt="Аватар пользователя"
+            />
+            <div class="vote">
+              <span class="count">15</span>
+              <div class="vote-buttons">
+                <button class="upvote">&#9650;</button>
+                <button class="downvote voted">&#9660;</button>
+              </div>
+            </div>
+          </div>
+          <div class="right-subsection">
+            <div class="answer-text">
+              <p>
+                It's strongly associated with Windows Vista's Aero theme, which
+                used a lot of transparency ("glass") and gradient effects. That,
+                combined with a general optimism that followed the dot-com
+                bubble burst, created a unique visual identity that was
+                aspirational and utopian.
+              </p>
+            </div>
+            <div class="bottom-right-subsection answer-meta-actions">
+              <span class="author-info"
+                >Answered by <a href="#">VistaFan</a> on 15 Sep '25</span
+              >
+              <div class="actions">
+                <div class="actions">
+                <input
+                  type="checkbox"
+                  id="correct-answer"
+                  name="is_correct"
+                />
+                <label for="correct-answer"> Correct Answer!</label>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <form class="new-answer-form" id="answer-form">
+          <h3>Your Answer:</h3>
+          <textarea
+            id="answer-text"
+            class="input"
+            rows="10"
+            placeholder="Write your detailed answer here..."
+            required
+          ></textarea>
+
+          <button class="button medium" type="submit">Post Answer</button>
+        </form>
+
+        <div class="pagination">
+          <button class="page active">1</button>
+          <button class="page">2</button>
+          <button class="page">3</button>
+          <span class="dots">…</span>
+          <button class="page">10</button>
+        </div>
+      </main>
+
+      <aside>
+        <div class="tags">
+          <h2>Popular tags</h2>
+          <ul>
+            <li><a href="#">HTML</a></li>
+            <li><a href="#">CSS</a></li>
+            <li><a href="#">JavaScript</a></li>
+          </ul>
+        </div>
+        <div class="best-members">
+          <h2>Best members</h2>
+          <ul>
+            <li><a href="#">my lovely bf</a></li>
+            <li><a href="#">me</a></li>
+            <li><a href="#">our future cat</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <b> @ 2025. Вкусно кушайте и высыпайтесь. </b>
+    </footer>
+  </body>
+</html>
