@@ -1,0 +1,192 @@
+/* user-settings.css - only for user-settings.html */
+
+.user-settings-container {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    margin: 30px 30px 0 30px;
+}
+
+.user-settings-main {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    padding: 40px 32px 32px 32px;
+    min-width: 420px;
+    flex-shrink: 0;
+    flex-grow: 1;
+    max-width: 540px;
+}
+
+.user-settings-main h2 {
+    margin-top: 0;
+    margin-bottom: 32px;
+    font-size: 1.7em;
+    font-weight: bold;
+    letter-spacing: .5px;
+}
+
+.user-form {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 24px 22px;
+}
+
+.user-form label {
+    align-self: center;
+    font-weight: 600;
+    letter-spacing: .2px;
+}
+
+.user-form input[type="text"],
+.user-form input[type="email"] {
+    width: 100%;
+    max-width: 260px;
+}
+
+.user-avatar-picker {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 18px;
+}
+
+.user-avatar-img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 1.5px solid #a9d4ff;
+    background: #e4f6ff;
+}
+
+.user-avatar-file {
+    font-size: .97em;
+    margin-right: 8px;
+    color: #2a86c9;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.user-avatar-file input[type="file"] {
+    display: none;
+}
+
+.user-avatar-choose {
+    /* Абсолютно такой же стиль, как .button.medium */
+    align-self: flex-start;
+    --hue: 171;
+    --sat: 0.2;
+    --glow-intensity: 0.7;
+    --fg: oklch(15% calc(var(--sat) * 0.5) var(--hue));
+    --bg: oklch(75% var(--sat) var(--hue) / 0.8);
+    --bg-dark: oklch(45% var(--sat) var(--hue) / 0.75);
+    --bottom-glow: radial-gradient(farthest-corner at bottom center,
+            rgba(255, 255, 255, var(--glow-intensity)),transparent);
+    background-color: var(--bg);
+    background:
+        var(--bottom-glow),
+        linear-gradient(to bottom, var(--bg-dark), var(--bg));
+    border: 1px solid var(--bg);
+    border-radius: 9999px;
+    box-shadow: 0 4px 4px rgba(0,0,0,0.4);
+    color: var(--fg);
+    font-family: "Lucida Grande", "Lucida Sans Unicode", "Segoe UI", system-ui, sans-serif;
+    font-weight: 700;
+    text-shadow: 0 2px 0.5em rgba(0,0,0,0.2);
+    cursor: pointer;
+    position: relative;
+    transition: all 300ms ease;
+    user-select: none;
+    -webkit-user-select: none;
+    padding: 0.75em 2em;
+    font-size: 1rem;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.user-avatar-choose::after {
+    content: "";
+    position: absolute;
+    top: 4%;
+    left: 0.75em;
+    width: calc(100% - 1.5em);
+    height: 40%;
+    background: linear-gradient(to bottom,rgba(255,255,255,0.8),rgba(255,255,255,0.1));
+    border-radius: inherit;
+    transition: background 400ms ease;
+    pointer-events: none;
+}
+
+.user-avatar-choose:hover,
+.user-avatar-choose:focus {
+    box-shadow: 0 6px 8px rgba(0,0,0,0.4);
+    transform: translateY(-1px);
+}
+
+.user-avatar-choose:active {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    transform: translateY(1px);
+}
+
+.user-form-actions {
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-top: 12px;
+}
+
+.user-form-actions button {
+    padding: 7px 30px;
+    font-weight: 600;
+}
+
+.user-settings-aside {
+    background: linear-gradient(180deg, rgba(157,197,255,1) 0%, rgba(101,182,255,1) 45%, rgba(0,98,241,1) 90%);
+    border-radius: 10px;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.13);
+    padding: 24px 32px 20px 32px;
+    min-width: 220px;
+    max-width: 300px;
+}
+
+.user-settings-aside h3 {
+    font-size: 1.24em;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px 12px;
+    margin-bottom: 27px;
+}
+
+.tags-list .tag {
+    font-size: 1em;
+    padding: 3px 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    font-weight: 500;
+}
+
+.tags-list .tag-python { color: #fd613a; background: rgba(255,255,255,0.2); }
+.tags-list .tag-mysql { color: #e23f45;}
+.tags-list .tag-django { color: #299c00;}
+
+.best-members-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0 0 18px 0;
+}
+
+.best-members-list li {
+    margin: 0 0 7px 0;
+    font-size: 1.05em;
+}
+
+.best-members-list a { color: #fff; text-decoration: underline }

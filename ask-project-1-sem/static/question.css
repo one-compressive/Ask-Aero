@@ -1,6 +1,6 @@
-/* question.css */
+/* question.css - only for question.html */
 
-/* Стили для формы ответа (использует общий стиль textarea из style.css) */
+
 .new-answer-form {
     display: flex;
     flex-direction: column;
@@ -14,7 +14,7 @@
 }
 
 .new-answer-form textarea {
-    width: 100%; /* Убедимся, что занимает всю ширину */
+    width: 100%;
     box-sizing: border-box;
 }
 
@@ -37,9 +37,7 @@
     color: #1A3E8C;
 }
 
-/* Стили для самого вопроса (полнотекстовая версия article) */
 .question-full {
-    /* Наследует стили от .article */
     flex-direction: row;
     align-items: flex-start;
     padding: 20px;
@@ -76,9 +74,7 @@
 }
 
 
-/* Стили для отдельного ответа (answer-item) */
 .answer-item {
-    /* Наследует стили от .article */
     margin-bottom: 15px;
     padding: 15px 20px;
     align-items: flex-start;
@@ -101,14 +97,11 @@
     gap: 10px;
 }
 
-/* Стили для правильного ответа */
 .answer-item.correct-answer {
-    border: 2px solid #008000; /* Зеленая рамка для выделения */
+    border: 2px solid #008000;
     background: linear-gradient(180deg, rgba(162, 230, 162, 0.4) 3%, rgba(245, 255, 245, 0.7) 5%, rgba(162, 230, 162, 0.4) 100%);
 }
 
 .answer-item .correct-button {
-    /* Стилизация кнопки "Correct Answer" */
-    --hue: 120; /* Зеленый цвет */
-    /* ... остальные стили кнопки */
+    --hue: 120;
 }
