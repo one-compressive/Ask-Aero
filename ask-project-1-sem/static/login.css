@@ -1,0 +1,25 @@
+.login-error-message {
+    color: #cc0000;
+    font-size: 0.9rem;
+}
+
+.user-form {
+    align-items: center;
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 15px 20px;
+    font-weight: 600;
+    letter-spacing: .2px;
+}
+
+.user-form button {
+    margin-left: 140px;
+    margin-bottom: 15px;
+}
+
+.user-form input[type="text"],
+.user-form input[type="password"] {
+    width: 100%;
+    max-width: 260px;
+}
