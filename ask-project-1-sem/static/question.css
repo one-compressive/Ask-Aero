@@ -23,7 +23,6 @@
     color: #0d2a4f;
 }
 
-/* Заголовок секции ответов */
 .answers-header {
     display: flex;
     justify-content: space-between;
@@ -77,6 +76,8 @@
 .answer-item {
     margin-bottom: 15px;
     padding: 15px 20px;
+    display: flex;
+    flex-direction: row;
     align-items: flex-start;
 }
 
