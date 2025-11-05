@@ -45,6 +45,7 @@ aside {
     padding: 20px;
     height: auto;
     box-sizing: border-box;
+    margin-right: -10px;
 
     flex: 1 1 250px;
     min-width: 250px;
