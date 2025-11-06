@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <title>Регистрация — AskAero</title>
+    <link rel="stylesheet" href="../static/style.css" />
+    <link rel="stylesheet" href="../static/signup.css" />
+  </head>
+  <body class="bg">
+    <header>
+      <h2><a href="#">AskAero</a></h2>
+      <div>
+        <form class="search-form">
+          <input type="text" placeholder="Search..." class="input">
+          <button class="button small" type="submit">Ask!</button>
+        </form>
+      </div>
+      <img class="img-small" src="../static/img/default-avatar.jpg" />
+      <div>
+        <b>User Name</b>
+        <div>
+          <a href="#">Settings</a>
+          <a href="#">Log out</a>
+        </div>
+      </div>
+    </header>
+    <div class="page-layout">
+      <main>
+        <div class="head-of-section">
+          <h1>Registration</h1>
+        </div>
+        <form class="signup-form">
+          <div class="error-message">Sorry, this email address allready registred!</div>
+          <label for="login">Login</label>
+          <input type="text" id="login" name="login" value="dr_pepper" required>
+
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" value="dr.pepper@mail.ru" required>
+
+          <label for="nickname">NickName</label>
+          <input type="text" id="nickname" name="nickname" value="Dr. Pepper" required>
+
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" value="********" required>
+
+          <label for="password-repeat">Repeat password</label>
+          <input type="password" id="password-repeat" name="password-repeat" value="********" required>
+
+          <label for="avatar" style="align-self:center;">Upload avatar</label>
+          <div class="signup-avatar-picker">
+            <input type="text" id="avatar-filename" value="c:\avatar.jpg" readonly class="avatar-filename-input" />
+            <label class="signup-avatar-choose">
+              choose
+              <input type="file" id="avatar" name="avatar" accept="image/*">
+            </label>
+          </div>
+          <button type="submit" class="button medium">Register!</button>
+        </form>
+      </main>
+      <aside>
+        <div class="tags">
+          <h2>Popular Tags</h2>
+          <ul>
+            <li><a href="#">HTML</a></li>
+            <li><a href="#">CSS</a></li>
+            <li><a href="#">JavaScript</a></li>
+          </ul>
+        </div>
+        <div class="best-members">
+          <h2>Best Members</h2>
+          <ul>
+            <li><a href="#">My lovely girlfriend</a></li>
+            <li><a href="#">Me</a></li>
+            <li><a href="#">Our future cat</a></li>
+            <li><a href="#">Our future stupid golden retriever</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+    <footer>
+      <b>@ 2025. Вкусно кушайте и высыпайтесь.</b>
+    </footer>
+  </body>
+</html>

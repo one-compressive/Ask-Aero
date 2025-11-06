@@ -1,0 +1,88 @@
+.signup-form {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 16px 18px;
+  background: transparent;
+  border-radius: 10px;
+  box-shadow: none;
+  border: none;
+  padding: 8px 0px 8px 0px;
+  margin-bottom: 16px;
+  min-width: 410px;
+  max-width: 600px;
+}
+.signup-form label {
+  align-self: center;
+  font-weight: 600;
+  letter-spacing: .2px;
+}
+.signup-form input[type="text"],
+.signup-form input[type="email"],
+.signup-form input[type="password"] {
+  width: 100%;
+  max-width: 240px;
+}
+.signup-form button {
+  grid-column: 2 / 3;
+  justify-self: start;
+  margin-top: 10px;
+}
+.signup-avatar-picker {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+.signup-avatar-choose {
+  align-self: flex-start;
+  --hue: 171;
+  --sat: 0.2;
+  --glow-intensity: 0.7;
+  --fg: oklch(15% calc(var(--sat) * 0.5) var(--hue));
+  --bg: oklch(75% var(--sat) var(--hue) / 0.8);
+  --bg-dark: oklch(45% var(--sat) var(--hue) / 0.75);
+  --bottom-glow: radial-gradient(farthest-corner at bottom center,rgba(255,255,255,var(--glow-intensity)),transparent);
+  background-color: var(--bg);
+  background: var(--bottom-glow), linear-gradient(to bottom, var(--bg-dark), var(--bg));
+  border: 1px solid var(--bg);
+  border-radius: 9999px;
+  box-shadow: 0 4px 4px rgba(0,0,0,0.4);
+  color: var(--fg);
+  font-family: "Lucida Grande","Lucida Sans Unicode","Segoe UI",system-ui,sans-serif;
+  font-weight: 700;
+  text-shadow: 0 2px 0.5em rgba(0,0,0,0.2);
+  cursor: pointer;
+  position: relative;
+  transition: all 300ms ease;
+  user-select: none;
+  -webkit-user-select: none;
+  padding: 0.6em 1.3em;
+  font-size: 0.95rem;
+  overflow: hidden;
+  display: inline-block;
+}
+.signup-avatar-choose input[type="file"] {
+  display: none;
+}
+.signup-avatar-choose:hover { box-shadow: 0 6px 8px rgba(0,0,0,0.4); transform: translateY(-1px); }
+.signup-avatar-choose:active { box-shadow: 0 2px 4px rgba(0,0,0,0.4); transform: translateY(1px); }
+.signup-avatar-choose::after {
+  content: "";
+  position: absolute;
+  top: 4%;
+  left: 0.75em;
+  width: calc(100% - 1.5em);
+  height: 40%;
+  background: linear-gradient(to bottom,rgba(255,255,255,0.8),rgba(255,255,255,0.1));
+  border-radius: inherit;
+  transition: background 400ms ease;
+  pointer-events: none;
+}
+.signup-form .error-message {
+  grid-column: 1 / -1;
+  color: #cc0000;
+  font-size: 0.97rem;
+  margin-bottom: -8px;
+  padding-left: 2px;
+  letter-spacing: 0.04em;
+}
