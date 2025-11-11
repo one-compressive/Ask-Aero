@@ -44,12 +44,18 @@
 </article>
 {% endfor %}
 
+{% if page.paginator.num_pages > 1 %}
+  <div class="pagination">
+      {% for p in page_range %}
+          {% if p == "..." %}
+              <span class="dots">...</span>
+          {% elif p == page.number %}
+              <span class="page active">{{ p }}</span>
+          {% else %}
+              <a class="page" href="{% url 'index_page' p %}">{{ p }}</a>
+          {% endif %}
+      {% endfor %}
+  </div>
+{% endif %}
 
-<div class="pagination">
-  <button class="page active">1</button>
-  <button class="page">2</button>
-  <button class="page">3</button>
-  <span class="dots">…</span>
-  <button class="page">5</button>
-</div>
 {% endblock %}

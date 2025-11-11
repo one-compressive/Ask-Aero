@@ -1,8 +1,52 @@
 from django.shortcuts import render
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-def index(request):
+def get_page_range(page, paginator):
+    current = page.number
+    last = paginator.num_pages
+
+    start_pages = [1, 2, 3]
+    end_pages = [last - 2, last - 1, last]
+
+    middle_pages = [
+        current - 1,
+        current,
+        current + 1
+    ]
+
+    pages = set()
+
+    for p in start_pages + middle_pages + end_pages:
+        if 1 <= p <= last:
+            pages.add(p)
+
+    pages = sorted(pages)
+
+    final = []
+    for i, p in enumerate(pages):
+        final.append(p)
+
+        if i < len(pages) - 1:
+            next_p = pages[i+1]
+            if next_p - p > 1:
+                final.append("...")
+
+    return final
+
+
+def paginate(objects_list, page_number, per_page=10):
+    paginator = Paginator(objects_list, per_page)
+    try:
+        page = paginator.page(page_number)
+    except PageNotAnInteger:
+        page = paginator.page(1)
+    except EmptyPage:
+        page = paginator.page(paginator.num_pages)
+    return page
+
+def index(request, page=1):
     questions = []
-    for i in range(1, 4):
+    for i in range(1, 3000):
         questions.append({
             'id': i,
             'title': f'What is Frutiger Aero? {i}',
@@ -11,7 +55,17 @@ def index(request):
             'count': 3,
             'tags': ['frutiger_aero', '2000s'],
         })
-    return render(request, "index.html", {'questions': questions})
+
+    paginator = Paginator(questions, 5)
+    page_obj = paginator.get_page(page)
+
+    page_range = get_page_range(page_obj, paginator)
+
+    return render(request, "index.html", {
+        "page": page_obj,
+        "page_range": page_range,
+        "questions": page_obj.object_list
+    })
 
 def ask(request):
     return render(request, "ask.html")
@@ -89,9 +143,9 @@ def settings(request):
 def signup(request):
     return render(request, "signup.html")
 
-def tag(request, tag_name):
+def tag(request, tag_name, page):
     questions = []
-    for i in range(1, 3):
+    for i in range(1, 30):
         questions.append({
             'id': i,
             'title': f'What is Frutiger Aero? {i}',
@@ -100,5 +154,20 @@ def tag(request, tag_name):
             'count': 3,
             'tags': ['frutiger_aero', '2000s'],
         })
-    pages = [{'number': i, 'active': i==1} for i in range(1,6)]
-    return render(request, "tag.html", {'tag_name': tag_name, 'questions': questions, 'pages': pages})
+
+    paginator = Paginator(questions, 5)
+    try:
+        page_obj = paginator.page(page)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+
+    page_range = get_page_range(page_obj, paginator)
+
+    return render(request, "tag.html", {
+        'tag_name': tag_name,
+        'questions': page_obj.object_list,
+        'page': page_obj,
+        'page_range': page_range
+    })

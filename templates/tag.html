@@ -35,11 +35,17 @@
 </article>
 {% endfor %}
 
-<div class="pagination">
-  {% for page in pages %} {% if page.active %}
-  <button class="page active">{{ page.number }}</button>
-  {% else %}
-  <button class="page">{{ page.number }}</button>
-  {% endif %} {% endfor %}
-</div>
+{% if page.paginator.num_pages > 1 %}
+  <div class="pagination">
+      {% for p in page_range %}
+          {% if p == "..." %}
+              <span class="dots">...</span>
+          {% elif p == page.number %}
+              <span class="page active">{{ p }}</span>
+          {% else %}
+              <a class="page" href="{% url 'index_page' p %}">{{ p }}</a>
+          {% endif %}
+      {% endfor %}
+  </div>
+{% endif %}
 {% endblock %}

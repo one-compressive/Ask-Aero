@@ -161,13 +161,12 @@ article:hover {
     font-weight: bold;
     color: #1A3E8C;
 }
-
 .pagination {
-    align-items: left;
     display: flex;
     gap: 10px;
     margin: 20px 0;
     flex-wrap: wrap;
+    align-items: center;
 }
 
 .pagination .page {
@@ -188,7 +187,6 @@ article:hover {
     border: 1px solid var(--bg);
     border-radius: 10px;
     padding: 0.5em 1em;
-    min-width: 40px;
 
     font-weight: 700;
     font-size: 0.95rem;
@@ -201,6 +199,14 @@ article:hover {
     user-select: none;
 
     border: 1px solid rgba(255, 255, 255, 0.4);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 30px;
+
+    padding: 0 12px;
 }
 
 .pagination .page:hover {
@@ -231,6 +237,7 @@ article:hover {
     padding: 0.5em 0.75em;
     user-select: none;
 }
+
 
 body.bg {
     background-image: url('../img/background.jpg');
