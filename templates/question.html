@@ -1,0 +1,117 @@
+{% extends "base.html" %} {% load static %} {% block extra_css %}
+<title>Ответы на вопрос — AskAero</title>
+<link rel="stylesheet" href="{% static 'css/question.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="head-of-section">
+  <h1>{{question.title}}</h1>
+</div>
+
+<article class="post-item">
+  <div class="left-subsection">
+    <img
+      class="img-small"
+      src="{% static 'img/default-avatar.jpg' %}"
+      alt="Аватар пользователя"
+    />
+    <div class="vote">
+      <span class="count">{{question.votes}}</span>
+      <div class="vote-buttons">
+        <button class="upvote">&#9650;</button>
+        <button class="downvote">&#9660;</button>
+      </div>
+    </div>
+  </div>
+  <div class="right-subsection">
+    <div class="post-text">
+      <p>{{ question.text }}</p>
+    </div>
+
+    <div class="bottom-right-subsection">
+      <div class="question-meta">
+        <span class="author-info"
+          >Asked by <a href="#">{{question.author}}</a> on
+          {{question.date}}</span
+        >
+        <p>Tags:</p>
+        {% for tag in question.tags %}
+        <a href="#">{{tag}}</a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</article>
+
+<div class="answers-header">
+  <h2>{{answers|length}} Answers</h2>
+  <a href="#answer-form" class="button small">Add Answer</a>
+</div>
+
+{% for answer in answers %}
+<article
+  {% if answer.is_correct %}
+  class="post-item correct-answer"
+  {% else %}
+  class="post-item"
+  {% endif %}
+>
+  <div class="left-subsection">
+    <img
+      class="img-small"
+      src="{% static 'img/default-avatar.jpg'%}"
+      alt="Аватар пользователя"
+    />
+    <div class="vote">
+      <span class="count">{{answer.votes}}</span>
+      <div class="vote-buttons">
+        <button class="upvote">&#9650;</button>
+        <button class="downvote">&#9660;</button>
+      </div>
+    </div>
+  </div>
+  <div class="right-subsection">
+    <div class="post-text">
+      <p>{{answer.text}}</p>
+    </div>
+    <div class="bottom-right-subsection answer-meta-actions">
+      <span class="author-info"
+        >Answered by <a href="#">{{answer.author}}</a> on {{answer.date}}</span
+      >
+      <div class="actions">
+        <input
+          type="checkbox"
+          id="correct-answer"
+          name="is_correct"
+          {% if answer.is_correct%}
+          checked
+          {% endif %}
+        />
+        <label for="correct-answer"> Correct Answer!</label>
+      </div>
+    </div>
+  </div>
+</article>
+{% endfor %}
+
+<form class="new-answer-form" id="answer-form">
+  <h3>Your Answer:</h3>
+  <textarea
+    id="answer-text"
+    class="input"
+    rows="10"
+    placeholder="Write your detailed answer here..."
+    required
+  ></textarea>
+
+  <button class="button medium" type="submit">Post Answer</button>
+</form>
+
+<div class="pagination">
+  <button class="page active">1</button>
+  <button class="page">2</button>
+  <button class="page">3</button>
+  <span class="dots">…</span>
+  <button class="page">10</button>
+</div>
+{% endblock %}

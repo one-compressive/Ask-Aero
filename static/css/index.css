@@ -19,15 +19,17 @@
     display: flex;
     flex-direction: column;
     align-items: left;
+    flex-grow: 3;
 }
 
+<!-- HACK: выводить только две строчек текста вопроса а не полностью его-->
 .bottom-right-subsection {
     display: flex;
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;
-    font-size: 0.85rem;
-    color: #0d2a4f;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-size: 0.9rem;
+    color: #555;
+    margin-top: 10px;
 }
 
 .bottom-right-subsection a {
@@ -36,8 +38,8 @@
 }
 
 .bottom-right-subsection p {
-    margin: 0;
-    font-weight: 500;
+    display: inline;
+    margin: 0 5px 0 15px;
 }
 
 .right-subsection {
@@ -45,6 +47,7 @@
     flex-direction: column;
     gap: 10px;
     flex-grow: 1;
+    padding-left: 15px;
 }
 
 .top-right-subsection a {

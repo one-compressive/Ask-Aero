@@ -1,0 +1,45 @@
+{% extends "base.html" %} {% load static %} {% block extra_css %}
+<title>Tag: {{ tag_name }} — AskAero</title>
+<link rel="stylesheet" href="{% static 'css/index.css' %}" />
+{% endblock %} {% block content %}
+<div class="head-of-section">
+  <h1>Tag: {{ tag_name }}</h1>
+</div>
+
+{% for question in questions %}
+<article>
+  <div class="left-subsection">
+    <img class="img-small" src="{% static 'img/default-avatar.jpg' %}" />
+    <div class="vote">
+      <span class="count">{{ question.votes }}</span>
+      <div class="vote-buttons">
+        <button class="upvote">&#9650;</button>
+        <button class="downvote">&#9660;</button>
+      </div>
+    </div>
+  </div>
+  <div class="right-subsection">
+    <div class="top-right-subsection">
+      <a href="#">{{ question.title }}</a>
+      <p>{{ question.text }}</p>
+    </div>
+
+    <div class="bottom-right-subsection">
+      <a href="#">answer({{question.count}})</a>
+      <p>Tags:</p>
+      {% for tag in question.tags %}
+      <a href="#">{{tag}}</a>
+      {% endfor %}
+    </div>
+  </div>
+</article>
+{% endfor %}
+
+<div class="pagination">
+  {% for page in pages %} {% if page.active %}
+  <button class="page active">{{ page.number }}</button>
+  {% else %}
+  <button class="page">{{ page.number }}</button>
+  {% endif %} {% endfor %}
+</div>
+{% endblock %}

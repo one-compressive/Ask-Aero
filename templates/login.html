@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <title>Войти — AskAero</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+{% endblock %}
+
+{% block content %}
+  <h1>Log In</h1>
+        <div class="login-error-message">Sorry, wrong password!</div>
+        <form class="user-form">
+          <label for="login">Login</label>
+          <input type="text" id="login" name="login" value="dr_pepper" />
+
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" value="qwerty" />
+
+          <div class="user-form-actions">
+            <button type="submit" class="button medium">Login</button>
+          </div>
+        </form>
+        <a href="#" style="margin-left: 145px;">Create new account</a>
+{% endblock %}

@@ -2,20 +2,30 @@
 
 <html lang="ru">
   <head>
-    <link rel="stylesheet" href="../static/style.css" />
-  </head>
-  <body class="bg">
+    {% load static %}
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    {% block extra_css %} {% endblock %}  </head>
+  <body
+    class="bg"
+    style="
+  background-image: url({% static "img/background.jpg" %});
+  background-repeat: no-repeat;
+  background-size: 100vw 100vh;
+  background-attachment: fixed;
+    ">
+    <!--HACK: заставить стиль фона рабоать из style.css, а не топорно вставить, как выше-->
     <header>
       <h2>
         <a href="#">AskAero</a>
       </h2>
       <div>
         <form class="search-form">
-          <input type="text" placeholder="Search..." class=input>
+          <input type="text" placeholder="Search..." class="input" />
           <button class="button small" type="submit">Ask!</button>
         </form>
       </div>
-      <img class="img-small" src="../static/img/default-avatar.jpg" />
+      <img class="img-small" src="{% static 'img/default-avatar.jpg' %}" />
       <div>
         <b>User Name</b>
         <div>
@@ -26,9 +36,7 @@
     </header>
 
     <div class="page-layout">
-      <main>
-        <!--здесь будет изменяемая часть-->
-      </main>
+      <main>{% block content %} {% endblock %}</main>
 
       <aside>
         <div class="tags">

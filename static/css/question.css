@@ -36,29 +36,17 @@
     color: #1A3E8C;
 }
 
-.question-full {
-    flex-direction: row;
-    align-items: flex-start;
-    padding: 20px;
-}
-
-.question-full .right-subsection {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
-
-.question-full .question-text {
+.post-item .post-text {
     font-size: 1.1rem;
     line-height: 1.6;
     margin-bottom: 15px;
 }
 
-.question-full .question-text p {
+.post-item .post-text p {
     margin: 5px 0;
 }
 
-.question-full .bottom-right-subsection {
+.post-item .bottom-right-subsection {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -67,42 +55,50 @@
     margin-top: 10px;
 }
 
-.question-full .question-meta p {
+.post-item .question-meta p {
     display: inline;
     margin: 0 5px 0 15px;
 }
 
-
-.answer-item {
-    margin-bottom: 15px;
-    padding: 15px 20px;
+/* HACK: сделать размер контейнера ответа зависящим от размера текста в нем*/
+.post-item {
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    gap: 15px;
+    padding: 20px;
+    align-items: stretch;
 }
 
-.answer-item .answer-text {
-    line-height: 1.5;
-    margin-bottom: 10px;
+.left-subsection {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
 }
 
-.answer-item .answer-meta-actions {
+.right-subsection {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.post-item .answer-meta-actions {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    width: 100%;
 }
 
-.answer-item .actions {
+.post-item .actions {
     display: flex;
     gap: 10px;
 }
 
-.answer-item.correct-answer {
+.post-item.correct-answer {
     border: 2px solid #008000;
     background: linear-gradient(180deg, rgba(162, 230, 162, 0.4) 3%, rgba(245, 255, 245, 0.7) 5%, rgba(162, 230, 162, 0.4) 100%);
 }
 
-.answer-item .correct-button {
+.post-item .correct-button {
     --hue: 120;
 }
