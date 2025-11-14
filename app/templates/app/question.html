@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% load static %} {% block extra_css %}
+{% extends "app/base.html" %} {% load static %} {% block extra_css %}
 <title>Ответы на вопрос — AskAero</title>
 <link rel="stylesheet" href="{% static 'css/question.css' %}" />
 {% endblock %}
@@ -16,7 +16,7 @@
       alt="Аватар пользователя"
     />
     <div class="vote">
-      <span class="count">{{question.votes}}</span>
+      <span class="count">{{question.score}}</span>
       <div class="vote-buttons">
         <button class="upvote">&#9650;</button>
         <button class="downvote">&#9660;</button>
@@ -35,7 +35,7 @@
           {{question.date}}</span
         >
         <p>Tags:</p>
-        {% for tag in question.tags %}
+        {% for tag in question.tags.all %}
         <a href="#">{{tag}}</a>
         {% endfor %}
       </div>
@@ -63,7 +63,7 @@
       alt="Аватар пользователя"
     />
     <div class="vote">
-      <span class="count">{{answer.votes}}</span>
+      <span class="count">{{answer.score}}</span>
       <div class="vote-buttons">
         <button class="upvote">&#9650;</button>
         <button class="downvote">&#9660;</button>
@@ -72,7 +72,7 @@
   </div>
   <div class="right-subsection">
     <div class="post-text">
-      <p>{{answer.text}}</p>
+      <p>{{answer.answer_text}}</p>
     </div>
     <div class="bottom-right-subsection answer-meta-actions">
       <span class="author-info"

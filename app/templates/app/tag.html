@@ -1,15 +1,9 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block extra_css %}
-    <title>AskAero</title>
-    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
-{% endblock %}
-
-{% block content %}
+{% extends "app/base.html" %} {% load static %} {% block extra_css %}
+<title>Tag: {{ tag_name }} — AskAero</title>
+<link rel="stylesheet" href="{% static 'css/index.css' %}" />
+{% endblock %} {% block content %}
 <div class="head-of-section">
-  <h1>New Questions</h1>
-  <a href="#">Hot Questions</a>
+  <h1>Tag: {{ tag_name }}</h1>
 </div>
 
 {% for question in questions %}
@@ -20,9 +14,7 @@
       <span class="count">{{ question.votes }}</span>
       <div class="vote-buttons">
         <button class="upvote">&#9650;</button>
-        <!-- ▲ -->
         <button class="downvote">&#9660;</button>
-        <!-- ▼ -->
       </div>
     </div>
   </div>
@@ -34,11 +26,10 @@
 
     <div class="bottom-right-subsection">
       <a href="#">answer({{question.count}})</a>
-      <!--HACK: сделать стиль тегов здесь и в /tag/ таким же, как в /question/-->
-        <p>Tags:</p>
-            {% for tag in question.tags %}
-            <a href="#">{{tag}}</a>
-        {% endfor %}
+      <p>Tags:</p>
+      {% for tag in question.tags %}
+      <a href="#">{{tag}}</a>
+      {% endfor %}
     </div>
   </div>
 </article>
@@ -57,5 +48,4 @@
       {% endfor %}
   </div>
 {% endif %}
-
 {% endblock %}
