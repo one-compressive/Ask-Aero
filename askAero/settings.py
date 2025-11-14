@@ -12,16 +12,18 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 
 from pathlib import Path
+from configparser import ConfigParser
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+config=ConfigParser()
+config.read(os.path.join(BASE_DIR, 'conf', 'local.conf'))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-vs5869x9q^u=vt+2&5wj)i@81^=mo0j#qrpwk$)$s$asq_6$w_'
+SECRET_KEY = config.get('askAero', 'SECRET_KEY', fallback='<UNFILLED_SECRET_KEY>')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -56,7 +58,7 @@ ROOT_URLCONF = 'askAero.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / 'templates'/ 'askAero'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
