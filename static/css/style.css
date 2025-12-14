@@ -11,6 +11,12 @@ body {
     overflow-x: hidden;
 }
 
+.header-right {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+
 .page-layout {
     flex: 1 0 auto;
     display: flex;

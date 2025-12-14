@@ -21,6 +21,22 @@ class User(AbstractUser):
         verbose_name_plural = 'Пользователи'
 
 
+from django.db.models import Sum
+
+class QuestionManager(models.Manager):
+    def new(self):
+        return self.all().order_by('-created_at')
+
+    from django.db.models import Sum
+
+    def hot(self):
+        return self.annotate(score_total=Sum('likes__value')).order_by('-score_total', '-created_at')
+
+    def by_tag(self, tag):
+        return self.filter(tags=tag).order_by('-created_at')
+
+
+
 class Question(DefaultModel):
     class Meta:
         verbose_name = 'Вопрос'
@@ -31,6 +47,7 @@ class Question(DefaultModel):
     text = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     tags = models.ManyToManyField('Tag', blank=True, verbose_name="Теги")
+    objects = QuestionManager()
 
     def __str__(self):
         return str(self.title)

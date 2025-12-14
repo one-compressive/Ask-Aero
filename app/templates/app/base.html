@@ -17,7 +17,7 @@
     <!--HACK: заставить стиль фона рабоать из style.css, а не топорно вставить, как выше-->
     <header>
       <h2>
-        <a href="#">AskAero</a>
+        <a href={% url 'index'%}>AskAero</a>
       </h2>
       <div>
         <form class="search-form">
@@ -25,12 +25,14 @@
           <button class="button small" type="submit">Ask!</button>
         </form>
       </div>
-      <img class="img-small" src="{% static 'img/default-avatar.jpg' %}" />
-      <div>
-        <b>User Name</b>
+      <div class='header-right'>
+        <img class="img-small" src="{% static 'img/default-avatar.jpg' %}" />
         <div>
-          <a href="#">Settings</a>
-          <a href="#">Log out</a>
+          <b>User Name</b>
+          <div class='header-subright-bottom'>
+            <a href={% url 'settings'%}>Settings</a>
+            <a href="#">Log out</a>
+          </div>
         </div>
       </div>
     </header>

@@ -8,8 +8,15 @@
 
 {% block content %}
 <div class="head-of-section">
-  <h1>New Questions</h1>
-  <a href="#">Hot Questions</a>
+  <h1>{{ page_title }}</h1>
+
+  {% if page_type != 'hot'%}
+    <a href="/?filter=hot">Hot Questions</a>
+  {% endif %}
+
+  {% if page_type != 'new'%}
+    <a href="/?filter=new">New Questions</a>
+  {% endif %}
 </div>
 
 {% for question in questions %}
@@ -28,16 +35,16 @@
   </div>
   <div class="right-subsection">
     <div class="top-right-subsection">
-      <a href="#">{{ question.title }}</a>
+      <a href={% url 'question' question.id %}>{{ question.title }}</a>
       <p>{{ question.text }}</p>
     </div>
 
     <div class="bottom-right-subsection">
-      <a href="#">answer({{question.score}})</a>
+      <a href="/question/{{question.id}}">answer({{question.score}})</a>
       <!--HACK: сделать стиль тегов здесь и в /tag/ таким же, как в /question/-->
         <p>Tags:</p>
             {% for tag in question.tags.all %}
-            <a href="#">{{tag}}</a>
+            <a href="/?filter=tag&tag_name={{ tag.title }}">{{tag.title}}</a>
         {% endfor %}
     </div>
   </div>
@@ -45,17 +52,19 @@
 {% endfor %}
 
 {% if page.paginator.num_pages > 1 %}
-  <div class="pagination">
-      {% for p in pages %}
-          {% if p == "..." %}
-              <span class="dots">...</span>
-          {% elif p == page.number %}
-              <span class="page active">{{ p }}</span>
-          {% else %}
-              <a class="page" href="{% url 'index_page' p %}">{{ p }}</a>
-          {% endif %}
-      {% endfor %}
-  </div>
+<div class="pagination">
+  {% for p in pages %}
+    {% if p == "..." %}
+      <span>...</span>
+    {% elif p == page.number %}
+      <span class="current">{{ p }}</span>
+    {% else %}
+      <a href="?{% if filter %}filter={{ filter }}{% if tag_name %}&tag_name={{ tag_name }}{% endif %}&{% endif %}page={{ p }}">
+        {{ p }}
+      </a>
+    {% endif %}
+  {% endfor %}
+</div>
 {% endif %}
 
 {% endblock %}

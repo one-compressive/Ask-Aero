@@ -36,7 +36,7 @@
         >
         <p>Tags:</p>
         {% for tag in question.tags.all %}
-        <a href="#">{{tag}}</a>
+        <a href="/?filter=tag&tag_name={{tag.title}}">{{tag.title}}</a>
         {% endfor %}
       </div>
     </div>

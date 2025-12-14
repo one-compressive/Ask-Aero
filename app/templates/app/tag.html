@@ -27,7 +27,7 @@
     <div class="bottom-right-subsection">
       <a href="#">answer({{question.count}})</a>
       <p>Tags:</p>
-      {% for tag in question.tags %}
+      {% for tag in question.tags.all %}
       <a href="#">{{tag}}</a>
       {% endfor %}
     </div>

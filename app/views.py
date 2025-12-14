@@ -1,6 +1,12 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import TemplateView
+from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
+
+from django.views.decorators.cache import never_cache
+from django.contrib.auth.decorators import login_required
+
 
 from app.models import User, Question, Answer, Tag, AnswerLike, QuestionLike
 
@@ -48,30 +54,56 @@ def paginate(objects_list, page_number, per_page=10):
         page = paginator.page(paginator.num_pages)
     return page
 
-
-class IndexView(TemplateView):
-    http_method_names=['get',]
-    template_name='app/index.html'
+@method_decorator(never_cache, name='dispatch')
+class QuestionListView(TemplateView):
+    template_name = "app/index.html"
     QUESTIONS_PER_PAGE = 4
 
-    def get_questions(self, tag=None):
-        if tag is None:
-            return Question.objects.all().order_by('-created_at')
+    def get_queryset_and_meta(self):
+        """
+        Возвращает:
+        queryset, page_type, page_title, tag (или None)
+        """
+        filter_type = self.request.GET.get('filter')
+        tag_name = self.request.GET.get('tag_name')
 
-        return Question.objects.filter(tags__title__in=[tag])
+        if filter_type == 'hot':
+            return (
+                Question.objects.hot(),
+                'hot',
+                'Hot Questions',
+                None
+            )
 
-    def get_tags(self):
-        return Tag.objects.all()
+        if filter_type == 'tag' and tag_name:
+            tag = get_object_or_404(Tag, title=tag_name)
+            return (
+                Question.objects.by_tag(tag),
+                'tag',
+                f'Tag: {tag.title}',
+                tag
+            )
+
+        return (
+            Question.objects.new(),
+            'new',
+            'New Questions',
+            None
+        )
 
     def get_context_data(self, **kwargs):
-        context = super(IndexView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
-        tag = self.request.GET.get('tag', None)
-        page_number = kwargs.get('page') or int(self.request.GET.get('page', 1))
+        page_number = self.kwargs.get('page') or self.request.GET.get('page', 1)
+        try:
+            page_number = int(page_number)
+        except ValueError:
+            page_number = 1
 
-        questions = self.get_questions(tag)
+        queryset, page_type, page_title, tag = self.get_queryset_and_meta()
 
-        paginator = Paginator(questions, self.QUESTIONS_PER_PAGE)
+        paginator = Paginator(queryset, self.QUESTIONS_PER_PAGE)
+
         try:
             page_obj = paginator.page(page_number)
         except PageNotAnInteger:
@@ -79,23 +111,26 @@ class IndexView(TemplateView):
         except EmptyPage:
             page_obj = paginator.page(paginator.num_pages)
 
-        page_range = get_page_range(page_obj, paginator)
+        context.update({
+            "questions": page_obj.object_list,
+            "page": page_obj,
+            "pages": get_page_range(page_obj, paginator),
+            "max_page": paginator.num_pages,
 
-        context['page'] = page_obj
-        context['questions_per_page'] = self.QUESTIONS_PER_PAGE
-        context['count_questions'] = questions.count()
-        context['max_page'] = paginator.num_pages
-        context['pages'] = page_range
-        context['questions'] = page_obj.object_list
-        context['tags'] = self.get_tags()
+            "page_type": page_type,
+            "page_title": page_title,
+            "tag": tag,
+
+            "filter": self.request.GET.get('filter'),
+            "tag_name": self.request.GET.get('tag_name'),
+
+            "tags": Tag.objects.all(),
+        })
 
         return context
 
-    def dispatch(self, request, *args, **kwargs):
-        print(request)
-        return super(IndexView, self).dispatch(request, *args, **kwargs)
 
-
+# TODO: FIX сортировка ломается при переходе со страницы /hot/ на вторую
 class QuestionView(TemplateView):
     http_method_names = ['get']
     template_name = 'app/question.html'
@@ -136,27 +171,17 @@ class QuestionView(TemplateView):
 
 
 def ask(request):
-    return render(request, "ask.html")
+    return render(request, "app/ask.html")
 
 def login(request):
-    return render(request, "login.html")
-
-def question(request, question_id):
-
-
-    context = {
-        'question': question_data,
-        'answers': answers,
-    }
-
-    return render(request, "question.html", context)
+    return render(request, "app/login.html")
 
 
 def settings(request):
-    return render(request, "settings.html")
+    return render(request, "app/settings.html")
 
 def signup(request):
-    return render(request, "signup.html")
+    return render(request, "app/signup.html")
 
 def tag(request, tag_name, page):
     questions = []
