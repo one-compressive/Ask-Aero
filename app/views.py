@@ -7,9 +7,16 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 
-
 from app.models import User, Question, Answer, Tag, AnswerLike, QuestionLike
 
+from app.forms import LoginForm
+
+from django.http import JsonResponse
+
+from django.shortcuts import redirect
+
+from django.contrib.auth import login, logout
+from django.contrib import messages
 
 def get_page_range(page, paginator):
     current = page.number
@@ -130,7 +137,6 @@ class QuestionListView(TemplateView):
         return context
 
 
-# TODO: FIX сортировка ломается при переходе со страницы /hot/ на вторую
 class QuestionView(TemplateView):
     http_method_names = ['get']
     template_name = 'app/question.html'
@@ -173,10 +179,6 @@ class QuestionView(TemplateView):
 def ask(request):
     return render(request, "app/ask.html")
 
-def login(request):
-    return render(request, "app/login.html")
-
-
 def settings(request):
     return render(request, "app/settings.html")
 
@@ -211,3 +213,28 @@ def tag(request, tag_name, page):
         'page': page_obj,
         'page_range': page_range
     })
+
+class AuthView(TemplateView):
+    http_method_names = ['get', 'post']
+    template_name = 'app/login.html'
+
+    def get_context_data(self, **kwargs):
+        form = LoginForm()
+        context = super(AuthView, self).get_context_data(**kwargs)
+        context['form'] = form
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = LoginForm(request.POST)
+
+        if form.is_valid():
+            login(request, form.user)
+            messages.add_message(request, messages.SUCCESS, "Вы успешно авторизованы в вашем аккаунте")
+            return redirect("/")
+
+        return render(request, "app/login.html", {"form": form})
+
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect("/login")

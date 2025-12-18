@@ -1,24 +1,39 @@
-{% extends "app/base.html" %}
-{% load static %}
+{% extends "app/base.html" %} {% load static %} {% block extra_css %}
+<title>Войти — AskAero</title>
+<link rel="stylesheet" href="{% static 'css/login.css' %}" />
+{% endblock %} {% block content %}
+<h1>Log In</h1>
+<div class="error-message">Sorry, wrong password!</div>
+<form method="post" class="user-form">
+  <!-- TODO: исправить выравнивание текста в кнопке-->
 
-{% block extra_css %}
-    <title>Войти — AskAero</title>
-    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
-{% endblock %}
+  {% if form.non_field_errors %}
+        <div class="error-message">
+            {% for error in form.non_field_errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+        {% endif %}
 
-{% block content %}
-  <h1>Log In</h1>
-        <div class="login-error-message">Sorry, wrong password!</div>
-        <form class="user-form">
-          <label for="login">Login</label>
-          <input type="text" id="login" name="login" value="dr_pepper" />
+  {% csrf_token %}
+  <label for="{{ form.username.id_for_label }}">Имя пользователя</label>
+  {{ form.username }} {% if form.username.errors %}
+  <div class="error-message">
+    {% for error in form.username.errors %} {{ error }} {% endfor %}
+  </div>
+  {% endif %}
 
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" value="qwerty" />
+  <label for="{{ form.password.id_for_label }}">Пароль</label>
+  {{ form.password }} {% if form.password.errors %}
+  <div class="error-message">
+    {% for error in form.password.errors %} {{ error }} {% endfor %}
+  </div>
+  {% endif %}
 
-          <div class="user-form-actions">
-            <button type="submit" class="button medium">Login</button>
-          </div>
-        </form>
-        <a href="#" style="margin-left: 145px;">Create new account</a>
+  <!-- <div class="user-form-actions"> -->
+  <button type="submit" class="button medium">Войти</button>
+  <!-- </div> -->
+</form>
+
+<a href="#" style="margin-left: 145px">Создать новый акккаунт</a>
 {% endblock %}

@@ -1,4 +1,4 @@
-.login-error-message {
+.error-message {
     color: #cc0000;
     font-size: 0.9rem;
 }
@@ -6,9 +6,10 @@
 .user-form {
     align-items: center;
     margin-top: 20px;
+    max-width: 420px;
     display: grid;
-    grid-template-columns: 120px 1fr;
-    gap: 15px 20px;
+    grid-template-columns: 140px minmax(200px, 1fr);
+    gap: 15px 40px;
     font-weight: 600;
     letter-spacing: .2px;
 }
@@ -16,10 +17,12 @@
 .user-form button {
     margin-left: 140px;
     margin-bottom: 15px;
+    grid-column: 2;
+    align-items: center;
 }
 
-.user-form input[type="text"],
-.user-form input[type="password"] {
+.user-form input {
     width: 100%;
-    max-width: 260px;
+    min-height: 38px;
+    box-sizing: border-box;
 }

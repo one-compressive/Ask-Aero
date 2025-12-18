@@ -28,10 +28,10 @@
       <div class='header-right'>
         <img class="img-small" src="{% static 'img/default-avatar.jpg' %}" />
         <div>
-          <b>User Name</b>
+          <b>{{ user.username }}</b>
           <div class='header-subright-bottom'>
             <a href={% url 'settings'%}>Settings</a>
-            <a href="#">Log out</a>
+            <a href={% url 'logout' %}>Log out</a>
           </div>
         </div>
       </div>
