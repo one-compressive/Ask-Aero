@@ -1,52 +1,55 @@
 {% extends "app/base.html" %} {% load static %} {% block extra_css %}
 <title>Регистрация — AskAero</title>
 <link rel="stylesheet" href="{% static 'css/signup.css' %}" />
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <div class="head-of-section">
   <h1>Registration</h1>
 </div>
-<form class="signup-form">
-  <div class="error-message">Sorry, this email address allready registred!</div>
-  <label for="login">Login</label>
-  <input type="text" id="login" name="login" value="dr_pepper" required />
+<form method="POST" class="signup-form">
+  {% csrf_token %}
 
-  <label for="email">Email</label>
-  <input
-    type="email"
-    id="email"
-    name="email"
-    value="dr.pepper@mail.ru"
-    required
-  />
+  {% if form.non_field_errors %}
+  <div class="error-message">
+    {% for error in form.non_field_errors %} {{ error }} {% endfor %}
+  </div>
+  {% endif %}
 
-  <label for="nickname">NickName</label>
-  <input
-    type="text"
-    id="nickname"
-    name="nickname"
-    value="Dr. Pepper"
-    required
-  />
+  <label for="{{ form.username.id_for_label }}">Login</label>
 
-  <label for="password">Password</label>
-  <input
-    type="password"
-    id="password"
-    name="password"
-    value="********"
-    required
-  />
+  <div>
+  {{ form.username }} {% if form.username.errors %}
+  <div class="error-message">
+    {% for error in form.username.errors %} {{ error }} {% endfor %}
+  </div>
+  {% endif %}
+  </div>
 
-  <label for="password-repeat">Repeat password</label>
-  <input
-    type="password"
-    id="password-repeat"
-    name="password-repeat"
-    value="********"
-    required
-  />
+  <label for="{{ form.email.id_for_label }}">Email</label>
+  <div>
+  {{ form.email }} {% if form.email.errors %}
+  <div class="error-message">
+    {% for error in form.email.errors %} {{ error }} {% endfor %}
+  </div>
+  {% endif %}
+  </div>
+
+  <label for="{{ form.password.id_for_label }}">Password</label>
+  <div>
+  {{ form.password }} {% if form.password.errors %}
+  <div class="error-message">
+    {% for error in form.password.errors %} {{ error }} {% endfor %}
+  </div>
+  {% endif %}
+  </div>
+
+  <label for="{{ form.password_repeat.id_for_label }}">Repeat password</label>
+  <div>
+  {{ form.password_repeat }} {% if form.password_repeat.errors %}
+  <div class="error-message">
+    {% for error in form.password_repeat.errors %} {{ error }} {% endfor %}
+  </div>
+  {% endif %}
+  </div>
 
   <label for="avatar" style="align-self: center">Upload avatar</label>
   <div class="signup-avatar-picker">

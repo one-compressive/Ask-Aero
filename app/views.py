@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 from app.models import User, Question, Answer, Tag, AnswerLike, QuestionLike
 
-from app.forms import LoginForm
+from app.forms import LoginForm, QuestionForm, RegisterForm, AnswerForm
 
 from django.http import JsonResponse
 
@@ -17,6 +17,8 @@ from django.shortcuts import redirect
 
 from django.contrib.auth import login, logout
 from django.contrib import messages
+
+from datetime import datetime
 
 def get_page_range(page, paginator):
     current = page.number
@@ -136,9 +138,10 @@ class QuestionListView(TemplateView):
 
         return context
 
-
+#TODO: добавить дату
+@method_decorator(login_required, name='dispatch')
 class QuestionView(TemplateView):
-    http_method_names = ['get']
+    http_method_names = ['get', 'post']
     template_name = 'app/question.html'
     ANSWERS_PER_PAGE = 4
 
@@ -147,6 +150,9 @@ class QuestionView(TemplateView):
 
         question_id = kwargs.get('question_id')
         page_number = kwargs.get('page') or int(self.request.GET.get('page', 1))
+
+        if 'form' not in context:
+            context['form'] = AnswerForm()
 
         question = Question.objects.prefetch_related('tags').get(id=question_id)
 
@@ -175,15 +181,31 @@ class QuestionView(TemplateView):
         print(request)
         return super(QuestionView, self).dispatch(request, *args, **kwargs)
 
+    def post(self, request, *args, **kwargs):
+        question_id = kwargs.get('question_id')
+
+        question = get_object_or_404(Question, id=question_id)
+
+        form = AnswerForm(request.POST)
+
+        if form.is_valid():
+            answer = form.save(commit=False)
+
+            answer.author = request.user
+            answer.question = question
+
+            answer.save()
+
+            messages.add_message(request, messages.SUCCESS, "Ваш ответ опубликован!")
+            return redirect("question", question_id=question_id)
+
+        return render(request, "app/question.html", {"form": form})
 
 def ask(request):
     return render(request, "app/ask.html")
 
 def settings(request):
     return render(request, "app/settings.html")
-
-def signup(request):
-    return render(request, "app/signup.html")
 
 def tag(request, tag_name, page):
     questions = []
@@ -238,3 +260,50 @@ class AuthView(TemplateView):
 def logout_view(request):
     logout(request)
     return redirect("/login")
+
+@method_decorator(login_required, name='dispatch')
+class CreateQuestionView(TemplateView):
+    http_method_names = ['get', 'post']
+    template_name = 'app/ask.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateQuestionView, self).get_context_data(**kwargs)
+        context['form'] = QuestionForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.author = request.user
+            #question.cover = request.FILES['image']
+            question.save()
+            print(request)
+            return redirect('index')
+
+        return render(request, 'app/ask.html', {'form': form})
+
+class RegisterView(TemplateView):
+    http_method_names = ['get', 'post']
+    template_name = 'app/signup.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = RegisterForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = RegisterForm(request.POST)
+
+        if form.is_valid():
+            user = User.objects.create_user(
+                username=form.cleaned_data['username'],
+                email=form.cleaned_data['email'],
+                password=form.cleaned_data['password'],
+            )
+
+            login(request, user)
+            messages.add_message(request, messages.SUCCESS, "Вы успешно авторизованы в вашем аккаунте")
+            return redirect("/")
+
+        return render(request, self.template_name, {'form': form})

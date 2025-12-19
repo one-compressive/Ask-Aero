@@ -1,3 +1,11 @@
+.error-message {
+    color: #cc0000;
+    font-size: 0.9rem;
+    padding: 10px;
+}
+
+
+
 body {
     width: 100vw;
     margin: 0;
@@ -103,6 +111,7 @@ article:hover {
     display: flex;
     flex-direction: row;
     gap: 20px;
+    margin-top: 10px;
     align-items: baseline;
 }
 

@@ -17,7 +17,10 @@
   {% if page_type != 'new'%}
     <a href="/?filter=new">New Questions</a>
   {% endif %}
+
+  <a href="{% url 'ask' %}" class="button small" style="margin-left: auto"> Ask a question! </a>
 </div>
+
 
 {% for question in questions %}
 <article>

@@ -32,7 +32,7 @@
       <div class="question-meta">
         <span class="author-info"
           >Asked by <a href="#">{{question.author}}</a> on
-          {{question.date}}</span
+          {{question.created_at}}</span
         >
         <p>Tags:</p>
         {% for tag in question.tags.all %}
@@ -94,15 +94,10 @@
 </article>
 {% endfor %}
 
-<form class="new-answer-form" id="answer-form">
+<form class="new-answer-form" id="answer-form" method="POST">
+  {% csrf_token %}
   <h3>Your Answer:</h3>
-  <textarea
-    id="answer-text"
-    class="input"
-    rows="10"
-    placeholder="Write your detailed answer here..."
-    required
-  ></textarea>
+  {{form.answer_text}}
 
   <button class="button medium" type="submit">Post Answer</button>
 </form>
