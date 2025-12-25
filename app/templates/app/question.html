@@ -1,28 +1,35 @@
-{% extends "app/base.html" %} {% load static %} {% block extra_css %}
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block extra_css %}
 <title>Ответы на вопрос — AskAero</title>
 <link rel="stylesheet" href="{% static 'css/question.css' %}" />
 {% endblock %}
 
 {% block content %}
+{% csrf_token %}
+
 <div class="head-of-section">
   <h1>{{question.title}}</h1>
 </div>
 
 <article class="post-item">
   <div class="left-subsection">
-    <img
-      class="img-small"
-      src="{% static 'img/default-avatar.jpg' %}"
-      alt="Аватар пользователя"
-    />
+    {% if question.author.avatar %}
+            <img src="{{ question.author.avatar.url }}" alt="{{ question.author.username }}" class="img-small">
+          {% else %}
+            <img src="{% static 'img/default-avatar.jpg' %}" alt="Default" class="img-small">
+          {% endif %}
     <div class="vote">
-      <span class="count">{{question.score}}</span>
+      <span class="count" id="question-{{ question.id }}-score">{{question.score}}</span>
+
       <div class="vote-buttons">
-        <button class="upvote">&#9650;</button>
-        <button class="downvote">&#9660;</button>
+        <button class="upvote" onclick="voteQuestion({{ question.id }}, 'like')">&#9650;</button>
+        <button class="downvote" onclick="voteQuestion({{ question.id }}, 'dislike')">&#9660;</button>
       </div>
     </div>
   </div>
+
   <div class="right-subsection">
     <div class="post-text">
       <p>{{ question.text }}</p>
@@ -30,13 +37,10 @@
 
     <div class="bottom-right-subsection">
       <div class="question-meta">
-        <span class="author-info"
-          >Asked by <a href="#">{{question.author}}</a> on
-          {{question.created_at}}</span
-        >
+        <span class="author-info">Asked by <a href="#">{{question.author}}</a> on {{question.created_at}}</span>
         <p>Tags:</p>
         {% for tag in question.tags.all %}
-        <a href="/?filter=tag&tag_name={{tag.title}}">{{tag.title}}</a>
+          <a href="/?filter=tag&tag_name={{tag.title}}">{{tag.title}}</a>
         {% endfor %}
       </div>
     </div>
@@ -49,47 +53,43 @@
 </div>
 
 {% for answer in answers %}
-<article
-  {% if answer.is_correct %}
-  class="post-item correct-answer"
-  {% else %}
-  class="post-item"
-  {% endif %}
->
+<article class="post-item {% if answer.is_correct %}correct-answer{% endif %}">
   <div class="left-subsection">
-    <img
-      class="img-small"
-      src="{% static 'img/default-avatar.jpg'%}"
-      alt="Аватар пользователя"
-    />
+    {% if answer.author.avatar %}
+            <img src="{{ answer.author.avatar.url }}" alt="{{ answer.author.username }}" class="img-small">
+          {% else %}
+            <img src="{% static 'img/default-avatar.jpg' %}" alt="Default" class="img-small">
+          {% endif %}
+
     <div class="vote">
-      <span class="count">{{answer.score}}</span>
+      <span class="count" id="answer-{{ answer.id }}-score">{{answer.score}}</span>
+
       <div class="vote-buttons">
-        <button class="upvote">&#9650;</button>
-        <button class="downvote">&#9660;</button>
+        <button class="upvote" onclick="voteAnswer({{ answer.id }}, 'like')">&#9650;</button>
+        <button class="downvote" onclick="voteAnswer({{ answer.id }}, 'dislike')">&#9660;</button>
       </div>
     </div>
   </div>
+
   <div class="right-subsection">
     <div class="post-text">
-      <p>{{answer.answer_text}}</p>
+       <p>{{ answer.answer_text }}</p>
     </div>
     <div class="bottom-right-subsection answer-meta-actions">
-      <span class="author-info"
-        >Answered by <a href="#">{{answer.author}}</a> on {{answer.date}}</span
-      >
-      <div class="actions">
+    <span class="author-info">Answered by <a href="#">{{answer.author}}</a> on {{answer.created_at}}</span>
+
+    <div class="actions" style="margin-left: 15px; display: inline-block;">
         <input
-          type="checkbox"
-          id="correct-answer"
-          name="is_correct"
-          {% if answer.is_correct%}
-          checked
-          {% endif %}
+            type="checkbox"
+            id="correct-answer-{{ answer.id }}"
+            name="is_correct"
+            {% if answer.is_correct %}checked{% endif %}
+            {% if request.user != question.author %}disabled{% endif %}
+            onclick="markAsCorrect({{ answer.id }})"
         />
-        <label for="correct-answer"> Correct Answer!</label>
-      </div>
+        <label for="correct-answer-{{ answer.id }}"> Correct Answer!</label>
     </div>
+</div>
   </div>
 </article>
 {% endfor %}
@@ -98,7 +98,83 @@
   {% csrf_token %}
   <h3>Your Answer:</h3>
   {{form.answer_text}}
-
   <button class="button medium" type="submit">Post Answer</button>
 </form>
+
+<script>
+  function getCSRFToken() {
+      const tokenInput = document.querySelector('[name=csrfmiddlewaretoken]');
+      return tokenInput ? tokenInput.value : '';
+  }
+
+  function markAsCorrect(answerId) {
+    fetch(`/answer/${answerId}/correct/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCSRFToken(),
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => { throw new Error(err.error || 'Ошибка'); });
+        }
+        return response.json();
+    })
+    .then(data => {
+        location.reload();
+    })
+    .catch(err => {
+        alert(err.message);
+        const cb = document.getElementById(`correct-answer-${answerId}`);
+        cb.checked = !cb.checked;
+    });
+}
+
+  function voteQuestion(questionId, action) {
+      fetch(`/question/${questionId}/${action}`, {
+          method: 'POST',
+          headers: {
+              'X-CSRFToken': getCSRFToken(),
+              'Content-Type': 'application/json'
+          },
+      })
+      .then(response => {
+          if (!response.ok) throw new Error('Vote failed');
+          return response.json();
+      })
+      .then(data => {
+          const scoreEl = document.getElementById(`question-${questionId}-score`);
+          if(scoreEl) scoreEl.textContent = data.score;
+      })
+      .catch(err => console.error(err));
+  }
+
+  function voteAnswer(answerId, action) {
+      fetch(`/answer/${answerId}/${action}`, {
+          method: 'POST',
+          headers: {
+              'X-CSRFToken': getCSRFToken(),
+              'Content-Type': 'application/json'
+          },
+      })
+      .then(response => {
+          if (!response.ok) {
+             return response.json().then(err => { throw new Error(err.error || 'Ошибка'); });
+          }
+          return response.json();
+      })
+      .then(data => {
+          const scoreEl = document.getElementById(`answer-${answerId}-score`);
+          if (scoreEl) {
+              scoreEl.textContent = data.score;
+          }
+      })
+      .catch(err => {
+          console.error(err);
+          alert(err.message);
+      });
+  }
+</script>
+
 {% endblock %}

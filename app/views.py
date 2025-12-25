@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 
@@ -205,6 +205,12 @@ def ask(request):
     return render(request, "app/ask.html")
 
 def settings(request):
+    if request.method == 'POST':
+        if 'avatar' in request.FILES:
+            user = request.user
+            user.avatar = request.FILES['avatar']
+            user.save()
+            return redirect('settings')
     return render(request, "app/settings.html")
 
 def tag(request, tag_name, page):
@@ -247,13 +253,12 @@ class AuthView(TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        form = LoginForm(request.POST)
+        form = LoginForm(request.POST, request.FILES)
 
         if form.is_valid():
             login(request, form.user)
             messages.add_message(request, messages.SUCCESS, "Вы успешно авторизованы в вашем аккаунте")
             return redirect("/")
-
         return render(request, "app/login.html", {"form": form})
 
 @login_required
@@ -293,7 +298,7 @@ class RegisterView(TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        form = RegisterForm(request.POST)
+        form = RegisterForm(request.POST, request.FILES)
 
         if form.is_valid():
             user = User.objects.create_user(
@@ -302,8 +307,156 @@ class RegisterView(TemplateView):
                 password=form.cleaned_data['password'],
             )
 
+            if form.cleaned_data.get('avatar'):
+                user.avatar = form.cleaned_data['avatar']
+                user.save()
+
             login(request, user)
-            messages.add_message(request, messages.SUCCESS, "Вы успешно авторизованы в вашем аккаунте")
+            messages.success(request, "Вы успешно зарегистрированы!")
             return redirect("/")
 
-        return render(request, self.template_name, {'form': form})
+@method_decorator(login_required, name='dispatch')
+class QuestionLikeAPI(View):
+    http_method_names = ["post"]
+
+    def apply_vote(self, user, question, value):
+        like = QuestionLike.objects.filter(user=user, question=question).first()
+        old_value = like.value if like else 0
+        new_value = value
+
+        # если голос не меняется
+        if old_value == new_value:
+            return 0
+
+        # снять голос
+        if new_value == 0 and like:
+            like.delete()
+            return -old_value
+
+        # поставить голос впервые
+        if not like:
+            QuestionLike.objects.create(user=user, question=question, value=new_value)
+            return new_value
+
+        # сменить лайк на дизлайк
+        like.value = new_value
+        like.save(update_fields=['value'])
+        return new_value - old_value
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        question_id = kwargs.get('question_id')
+        question = get_object_or_404(Question, id=question_id)
+
+        if question.author == user:
+            return JsonResponse({
+                'success': False,
+                'error': 'Вы являетесь автором вопроса.'
+            }, status=400)
+
+        if 'dislike' in request.path:
+            value = -1
+        elif 'like' in request.path:
+            value = 1
+        else:
+            return JsonResponse({
+                'success': False,
+                'error': 'Некорректное действие.'
+            }, status=400)
+
+        delta = self.apply_vote(user=user, question=question, value=value)
+
+        question.refresh_from_db()
+        return JsonResponse({
+            'success': True,
+            'delta': delta,
+            'score': question.score
+        })
+
+
+
+
+'''пока что коды классов QuestionLikeAPI и AnswerLikeAPI совпадают, но работают - позже я избавлюсь от дублирования'''
+
+
+@method_decorator(login_required, name='dispatch')
+class AnswerLikeAPI(View):
+    http_method_names = ["post"]
+
+    def apply_vote(self, user, answer, value):
+        like = AnswerLike.objects.filter(user=user, answer=answer).first()
+        old_value = like.value if like else 0
+        new_value = value
+
+        if old_value == new_value:
+            return 0
+
+        if new_value == 0 and like:
+            like.delete()
+            return -old_value
+
+        if not like:
+            AnswerLike.objects.create(user=user, answer=answer, value=new_value)
+            return new_value
+
+        like.value = new_value
+        like.save(update_fields=['value'])
+        return new_value - old_value
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        answer_id = kwargs.get('answer_id')
+        answer = get_object_or_404(Answer, id=answer_id)
+
+        if answer.author == user:
+            return JsonResponse({
+                'success': False,
+                'error': 'Вы являетесь автором вопроса.'
+            }, status=400)
+
+        if 'dislike' in request.path:
+            value = -1
+        elif 'like' in request.path:
+            value = 1
+        else:
+            return JsonResponse({
+                'success': False,
+                'error': 'Некорректное действие.'
+            }, status=400)
+
+        delta = self.apply_vote(user=user, answer=answer, value=value)
+
+        answer.refresh_from_db()
+        return JsonResponse({
+            'success': True,
+            'delta': delta,
+            'score': answer.score
+        })
+
+
+@method_decorator(login_required, name='dispatch')
+class MarkCorrectAnswerAPI(View):
+    http_method_names = ["post"]
+
+    def post(self, request, *args, **kwargs):
+        answer_id = kwargs.get('answer_id')
+        answer = get_object_or_404(Answer, id=answer_id)
+        question = answer.question
+
+        if question.author != request.user:
+            return JsonResponse({
+                'success': False,
+                'error': 'Только автор вопроса может выбирать правильный ответ.'
+            }, status=403)
+        if answer.is_correct:
+            answer.is_correct = False
+        else:
+            Answer.objects.filter(question=question, is_correct=True).update(is_correct=False)
+            answer.is_correct = True
+
+        answer.save()
+
+        return JsonResponse({
+            'success': True,
+            'is_correct': answer.is_correct
+        })

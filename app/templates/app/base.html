@@ -26,13 +26,19 @@
         </form>
       </div>
       <div class='header-right'>
-        <img class="img-small" src="{% static 'img/default-avatar.jpg' %}" />
-        <div>
-          <b>{{ user.username }}</b>
-          <div class='header-subright-bottom'>
-            <a href={% url 'settings'%}>Settings</a>
-            <a href={% url 'logout' %}>Log out</a>
-          </div>
+        {% if user.is_authenticated %}
+          {% if user.avatar %}
+            <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="img-small">
+          {% else %}
+            <img src="{% static 'img/default-avatar.jpg' %}" alt="Default" class="img-small">
+          {% endif %}
+        {% endif %}
+          <div>
+            <b>{{ user.username }}</b>
+            <div class='header-subright-bottom'>
+              <a href={% url 'settings'%}>Settings</a>
+              <a href={% url 'logout' %}>Log out</a>
+            </div>
         </div>
       </div>
     </header>

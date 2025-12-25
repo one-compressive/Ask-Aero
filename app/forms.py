@@ -77,6 +77,7 @@ class RegisterForm(forms.Form):
             'autocomplete': 'new-password'
         }),
     )
+    avatar = forms.ImageField(required=False)
 
     def clean_username(self):
         username = self.cleaned_data['username']

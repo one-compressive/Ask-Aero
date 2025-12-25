@@ -5,7 +5,7 @@
 <div class="head-of-section">
   <h1>Registration</h1>
 </div>
-<form method="POST" class="signup-form">
+<form method="POST" class="signup-form" enctype="multipart/form-data">
   {% csrf_token %}
 
   {% if form.non_field_errors %}
@@ -53,17 +53,12 @@
 
   <label for="avatar" style="align-self: center">Upload avatar</label>
   <div class="signup-avatar-picker">
-    <input
-      type="text"
-      id="avatar-filename"
-      value="c:\avatar.jpg"
-      readonly
-      class="avatar-filename-input"
-    />
-    <label class="signup-avatar-choose">
-      choose
-      <input type="file" id="avatar" name="avatar" accept="image/*" />
-    </label>
+    {{ form.avatar }}
+    {% if form.avatar.errors %}
+      <div class="error-message">
+        {% for error in form.avatar.errors %} {{ error }} {% endfor %}
+      </div>
+    {% endif %}
   </div>
   <button type="submit" class="button medium">Register!</button>
 </form>

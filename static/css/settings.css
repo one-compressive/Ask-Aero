@@ -1,4 +1,44 @@
 /* user-settings.css - only for user-settings.html */
+#avatar-filename {
+    font-size: 1.2rem;
+    color: #2a86c9ff;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.avatar-picker {
+    --hue: 171;
+    --sat: 0.2;
+    --glow-intensity: 0.7;
+
+    --bg: oklch(75% var(--sat) var(--hue) / 0.8);
+    --bg-dark: oklch(45% var(--sat) var(--hue) / 0.75);
+    --bottom-glow: radial-gradient(farthest-corner at bottom center,
+            rgba(255, 255, 255, var(--glow-intensity)),
+            transparent);
+
+    width: 40px;
+    height: auto;
+    margin: 10px;
+    padding: 12px;
+    border-radius: 20px;
+
+    background-color: var(--bg);
+    background:
+        var(--bottom-glow),
+        linear-gradient(to bottom, var(--bg-dark), var(--bg));
+
+    border: 1px solid var(--bg);
+    box-shadow: 4px 4px 30px 0px white;
+
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    object-fit: cover;
+}
+
 .user-form {
     display: grid;
     grid-template-columns: 120px 1fr;
@@ -36,7 +76,7 @@
 .user-avatar-file {
     font-size: .97em;
     margin-right: 8px;
-    color: #2a86c9;
+    color: #2a86c9ff;
     display: flex;
     align-items: center;
     gap: 5px;

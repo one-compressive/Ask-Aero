@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block content %}
+{% csrf_token %}
 <div class="head-of-section">
   <h1>{{ page_title }}</h1>
 
@@ -25,16 +26,25 @@
 {% for question in questions %}
 <article>
   <div class="left-subsection">
-    <img class="img-small" src="{% static 'img/default-avatar.jpg' %}" />
+    {% if question.author.avatar %}
+            <img src="{{ question.author.avatar.url }}" alt="{{ question.author.username }}" class="img-small">
+          {% else %}
+            <img src="{% static 'img/default-avatar.jpg' %}" alt="Default" class="img-small">
+          {% endif %}
     <div class="vote">
-      <span class="count">{{ question.score }}</span>
+      <span class="count" id="question-{{ question.id }}-score">
+        {{ question.score }}
+      </span>
       <div class="vote-buttons">
-        <button class="upvote">&#9650;</button>
-        <!-- ▲ -->
-        <button class="downvote">&#9660;</button>
-        <!-- ▼ -->
-      </div>
+        <button onclick="voteQuestion({{ question.id }}, 'like')" class="upvote">
+          &#9650;
+        </button>
+        <button onclick="voteQuestion({{ question.id }}, 'dislike')" class="downvote">
+          &#9660;
+        </button>
     </div>
+</div>
+
   </div>
   <div class="right-subsection">
     <div class="top-right-subsection">
@@ -43,7 +53,7 @@
     </div>
 
     <div class="bottom-right-subsection">
-      <a href="/question/{{question.id}}">answer({{question.score}})</a>
+<a href="{% url 'question' question.id %}">answer({{ question.answer_set.count }})</a>
       <!--HACK: сделать стиль тегов здесь и в /tag/ таким же, как в /question/-->
         <p>Tags:</p>
             {% for tag in question.tags.all %}
@@ -58,16 +68,43 @@
 <div class="pagination">
   {% for p in pages %}
     {% if p == "..." %}
-      <span>...</span>
+      <span class="dots">...</span>
     {% elif p == page.number %}
-      <span class="current">{{ p }}</span>
+      <span class="page active">{{ p }}</span>
     {% else %}
-      <a href="?{% if filter %}filter={{ filter }}{% if tag_name %}&tag_name={{ tag_name }}{% endif %}&{% endif %}page={{ p }}">
+      <a class="page" href="?{% if filter %}filter={{ filter }}{% if tag_name %}&tag_name={{ tag_name }}{% endif %}&{% endif %}page={{ p }}">
         {{ p }}
       </a>
     {% endif %}
   {% endfor %}
 </div>
 {% endif %}
+
+<script>
+  function getCSRFToken() {
+      return document.querySelector('[name=csrfmiddlewaretoken]').value;
+  }
+
+  function voteQuestion(questionId, action) {
+      fetch(`/question/${questionId}/${action}`, {
+          method: 'POST',
+          headers: {
+              'X-CSRFToken': getCSRFToken(),
+          },
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Vote failed');
+          }
+          return response.json();
+      })
+      .then(data => {
+          const scoreEl = document.getElementById(`question-${questionId}-score`);
+          scoreEl.textContent = data.score;
+      })
+      .catch(err => console.error(err));
+  }
+</script>
+
 
 {% endblock %}

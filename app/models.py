@@ -71,6 +71,8 @@ class Answer(DefaultModel):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     answer_text = models.TextField()
 
+    is_correct = models.BooleanField(default=False)
+
     def __str__(self):
         return "Ответ на вопрос ID=" + str(self.question_id)
 

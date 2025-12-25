@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import QuestionListView, QuestionView, AuthView, CreateQuestionView, RegisterView, ask, settings, logout_view
+from .views import QuestionListView, QuestionView, AuthView, CreateQuestionView, RegisterView, ask, settings, logout_view, QuestionLikeAPI, AnswerLikeAPI, MarkCorrectAnswerAPI
 
 
 urlpatterns = [
@@ -11,4 +11,9 @@ urlpatterns = [
     path('settings/', settings, name='settings'),
     path('question/<int:question_id>/', QuestionView.as_view(), name='question'),
     path('logout/', logout_view, name="logout"),
+    path('question/<int:question_id>/like', QuestionLikeAPI.as_view(), name='question_like'),
+    path('question/<int:question_id>/dislike', QuestionLikeAPI.as_view(), name='question_dislike'),
+    path('answer/<int:answer_id>/like', AnswerLikeAPI.as_view(), name='answer_like'),
+    path('answer/<int:answer_id>/dislike', AnswerLikeAPI.as_view(), name='answer_dislike'),
+    path('answer/<int:answer_id>/correct/', MarkCorrectAnswerAPI.as_view(), name='mark_correct'),
 ]
