@@ -17,6 +17,7 @@ from django.shortcuts import redirect
 
 from django.contrib.auth import login, logout
 from django.contrib import messages
+from django.db.models import Q
 
 from datetime import datetime
 
@@ -459,4 +460,48 @@ class MarkCorrectAnswerAPI(View):
         return JsonResponse({
             'success': True,
             'is_correct': answer.is_correct
+        })
+
+
+class SearchAPI(View):
+    http_method_names = ["get"]
+
+    def get(self, request, *args, **kwargs):
+        query = request.GET.get('q', '').strip()
+
+        if not query or len(query) < 2:
+            return JsonResponse({
+                'success': True,
+                'results': []
+            })
+
+        questions = Question.objects.filter(
+            Q(title__icontains=query) | Q(text__icontains=query),
+            is_active=True
+        ).select_related('author').prefetch_related('tags').distinct()
+
+        questions = sorted(
+            questions,
+            key=lambda q: (
+                0 if query.lower() in q.title.lower() else 1,
+                -q.created_at.timestamp() if q.created_at else 0
+            )
+        )[:10]
+
+        results = []
+        for question in questions:
+            text_preview = question.text[:200] + '...' if len(question.text) > 200 else question.text
+            results.append({
+                'id': question.id,
+                'title': question.title,
+                'text': text_preview,
+                'url': f'/question/{question.id}/',
+                'author': question.author.username,
+                'score': question.score,
+            })
+
+        return JsonResponse({
+            'success': True,
+            'results': results,
+            'count': len(results)
         })

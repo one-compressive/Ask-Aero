@@ -486,3 +486,97 @@ textarea::placeholder {
     margin-top: -5px;
     padding-left: 80px;
 }
+
+.search-container {
+    position: relative;
+}
+
+.search-form {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    position: relative;
+    align-items: center;
+}
+
+.search-input {
+    min-width: 250px;
+}
+
+.search-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 5px;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 1000;
+    min-width: 300px;
+}
+
+.suggestion-item {
+    display: block;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: #0d2a4f;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover,
+.suggestion-item.suggestion-active {
+    background-color: rgba(101, 182, 255, 0.1);
+    color: #0d2a4f;
+}
+
+.suggestion-title {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: #1A3E8C;
+}
+
+.suggestion-text {
+    font-size: 0.875rem;
+    color: #555;
+    margin-bottom: 8px;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.suggestion-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: #888;
+    margin-top: 5px;
+}
+
+.suggestion-author {
+    font-style: italic;
+}
+
+.suggestion-score {
+    font-weight: 600;
+}
+
+.suggestion-empty {
+    padding: 20px;
+    text-align: center;
+    color: #888;
+    font-style: italic;
+}

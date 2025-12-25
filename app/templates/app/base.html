@@ -19,10 +19,11 @@
       <h2>
         <a href={% url 'index'%}>AskAero</a>
       </h2>
-      <div>
+      <div class="search-container">
         <form class="search-form">
-          <input type="text" placeholder="Search..." class="input" />
+          <input type="text" placeholder="Search..." class="input search-input" autocomplete="off" />
           <button class="button small" type="submit">Ask!</button>
+          <div class="search-suggestions" style="display: none;"></div>
         </form>
       </div>
       <div class='header-right'>
@@ -69,5 +70,6 @@
     <footer>
       <b> @ 2025. Вкусно кушайте и высыпайтесь. </b>
     </footer>
+    <script src="{% static 'js/search.js' %}"></script>
   </body>
 </html>
