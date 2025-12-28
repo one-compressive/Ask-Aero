@@ -4,7 +4,12 @@
     padding: 10px;
 }
 
-
+.bg {
+    background-image: url('../img/background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover; /* cover обычно лучше, чем 100vw 100vh, чтобы избежать искажений */
+    background-attachment: fixed;
+}
 
 body {
     width: 100vw;

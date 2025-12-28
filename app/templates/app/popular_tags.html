@@ -1,0 +1,10 @@
+<div class="tags">
+  <h2>Popular tags</h2>
+  <ul>
+    {% for tag in tags %}
+      <li><a href="/?filter=tag&tag_name={{ tag.title }}">{{ tag.title }}</a></li>
+    {% empty %}
+      <li>No tags yet</li>
+    {% endfor %}
+  </ul>
+</div>

@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 
 <html lang="ru">
-  <head>
+<head>
     {% load static %}
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-    {% block extra_css %} {% endblock %}  </head>
-  <body
-    class="bg"
-    style="
-  background-image: url({% static "img/background.jpg" %});
-  background-repeat: no-repeat;
-  background-size: 100vw 100vh;
-  background-attachment: fixed;
-    ">
-    <!--HACK: заставить стиль фона рабоать из style.css, а не топорно вставить, как выше-->
+    {% block extra_css %} {% endblock %}
+</head>
+<body class="bg">
     <header>
-      <h2>
-        <a href={% url 'index'%}>AskAero</a>
-      </h2>
+        <h2>
+            <a href="{% url 'index' %}">AskAero</a>
+        </h2>
       <div class="search-container">
         <form class="search-form">
           <input type="text" placeholder="Search..." class="input search-input" autocomplete="off" />
@@ -48,22 +41,9 @@
       <main>{% block content %} {% endblock %}</main>
 
       <aside>
-        <div class="tags">
-          <h2>Popular tags</h2>
-          <ul>
-            <li><a href="#">HTML</a></li>
-            <li><a href="#">CSS</a></li>
-            <li><a href="#">JavaScript</a></li>
-          </ul>
-        </div>
-        <div class="best-members">
-          <h2>Best members</h2>
-          <ul>
-            <li><a href="#">my lovely bf</a></li>
-            <li><a href="#">me</a></li>
-            <li><a href="#">our future cat</a></li>
-          </ul>
-        </div>
+        {% load sidebar_tags %}
+        {% popular_tags %}
+        {% best_members %}
       </aside>
     </div>
 

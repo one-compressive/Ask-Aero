@@ -1,0 +1,10 @@
+<div class="best-members">
+  <h2>Best members</h2>
+  <ul>
+    {% for member in members %}
+      <li><a href="#">{{ member.username }}</a></li>
+    {% empty %}
+      <li>No members yet</li>
+    {% endfor %}
+  </ul>
+</div>

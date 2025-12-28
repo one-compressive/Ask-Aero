@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from app.models import User, Question, Answer, Tag, AnswerLike, QuestionLike
 
 from app.forms import LoginForm, QuestionForm, RegisterForm, AnswerForm
+from app.centrifugo_client import publish_to_centrifugo
 
 from django.http import JsonResponse
 
@@ -169,12 +170,15 @@ class QuestionView(TemplateView):
 
         page_range = get_page_range(page_obj, paginator)
 
+        from django.conf import settings
         context['question'] = question
         context['answers'] = page_obj.object_list
         context['page'] = page_obj
         context['page_range'] = page_range
         context['answers_per_page'] = self.ANSWERS_PER_PAGE
         context['max_page'] = paginator.num_pages
+        context['centrifugo_ws_url'] = settings.CENTRIFUGO_WS_URL
+        context['question_channel'] = f"question_{question_id}"
 
         return context
 
@@ -196,6 +200,18 @@ class QuestionView(TemplateView):
             answer.question = question
 
             answer.save()
+
+            channel = f"question_{question_id}"
+            answer_data = {
+                "id": answer.id,
+                "text": answer.answer_text,
+                "author": answer.author.username,
+                "author_avatar": answer.author.avatar.url if answer.author.avatar else None,
+                "created_at": answer.created_at.isoformat() if answer.created_at else None,
+                "score": answer.score,
+                "is_correct": answer.is_correct
+            }
+            publish_to_centrifugo(channel, answer_data)
 
             messages.add_message(request, messages.SUCCESS, "Ваш ответ опубликован!")
             return redirect("question", question_id=question_id)

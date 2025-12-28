@@ -4,6 +4,7 @@
 {% block extra_css %}
 <title>Ответы на вопрос — AskAero</title>
 <link rel="stylesheet" href="{% static 'css/question.css' %}" />
+<script src="https://cdn.jsdelivr.net/npm/centrifuge@5/dist/centrifuge.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -52,6 +53,10 @@
   <a href="#answer-form" class="button small">Add Answer</a>
 </div>
 
+<div id="centrifugo-ws-url" data-url="{{ centrifugo_ws_url }}" style="display: none;"></div>
+<div id="centrifugo-channel" data-channel="{{ question_channel }}" style="display: none;"></div>
+
+<div class="answers-container">
 {% for answer in answers %}
 <article class="post-item {% if answer.is_correct %}correct-answer{% endif %}">
   <div class="left-subsection">
@@ -93,6 +98,7 @@
   </div>
 </article>
 {% endfor %}
+</div>
 
 <form class="new-answer-form" id="answer-form" method="POST">
   {% csrf_token %}
@@ -176,5 +182,6 @@
       });
   }
 </script>
+<script src="{% static 'js/centrifugo.js' %}"></script>
 
 {% endblock %}

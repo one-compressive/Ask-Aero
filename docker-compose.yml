@@ -21,3 +21,12 @@ services:
       - ./uploads:/app/uploads
     depends_on:
       - web
+      - centrifugo
+
+  centrifugo:
+    image: centrifugo/centrifugo:v5
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./centrifugo.json:/centrifugo.json
+    command: centrifugo -c centrifugo.json
